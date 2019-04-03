@@ -19,16 +19,22 @@ router.get('/', (ctx: Koa.Context) => {
 router.post('/on', async (ctx: Koa.Context): Promise<void> => {
   console.log('Starting time entry')
   const { clientSecret, projectId, description } = ctx.request.body
-  const response = await startTimeEntry(clientSecret, projectId, description)
-  ctx.body = response
+  if (!projectId || !description) {
+    ctx.status = 400
+    return;
+  }
+
+  const timeEntry = await startTimeEntry(clientSecret, description, projectId)
+  ctx.body = timeEntry
   ctx.status = 200
-  console.log('Time entry started', response)
+  console.log('Time entry started', timeEntry)
 });
 
 router.post('/off', async (ctx: Koa.Context): Promise<void> => {
   console.log('Stopping time entry')
-  const currentTimeEntry = await getCurrentTimeEntry(ctx.clientSecret)
-  await stopTimeEntry(ctx.clientSecret, currentTimeEntry.data.id)
+  const { clientSecret } = ctx.request.body
+  const currentTimeEntry = await getCurrentTimeEntry(clientSecret)
+  await stopTimeEntry(clientSecret, currentTimeEntry.data.id)
   ctx.body = currentTimeEntry
   ctx.status = 200
   console.log('Time entry stopped', currentTimeEntry)
@@ -36,9 +42,13 @@ router.post('/off', async (ctx: Koa.Context): Promise<void> => {
 
 app.use(logger())
 app.use(bodyParser())
-app.use(async (ctx, next) => {
-   ctx.clientSecret = ctx.request.body.clientSecret
-   console.log('Client secret', ctx.clientSecret)
+app.use(async (ctx: Koa.Context, next: Function) => {
+    const { clientSecret } = ctx.request.body
+   if (!clientSecret) {
+     ctx.response.status = 400
+     return
+   }
+   console.log('Client secret', clientSecret)
    await next()
 })
 app.use(router.routes())
