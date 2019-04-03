@@ -6,13 +6,14 @@ interface TimeEntry {
   }
 }
 
-export const startTimeEntry = async (clientSecret: string): Promise<TimeEntry> => {
+export const startTimeEntry = async (clientSecret: string, description: string, projectId: number): Promise<TimeEntry> => {
   const url = `https://${clientSecret}:api_token@www.toggl.com/api/v8/time_entries/start`
   const response: Response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify({
       "time_entry": {
-        "description":"Office",
+        description,
+        "pid": projectId,
         "tags":[],
         "created_with":"curl"
       }

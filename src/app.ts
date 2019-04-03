@@ -18,7 +18,8 @@ router.get('/', (ctx: Koa.Context) => {
 })
 router.post('/on', async (ctx: Koa.Context): Promise<void> => {
   console.log('Starting time entry')
-  const response = await startTimeEntry(ctx.clientSecret)
+  const { clientSecret, projectId, description } = ctx.request.body
+  const response = await startTimeEntry(clientSecret, projectId, description)
   ctx.body = response
   ctx.status = 200
   console.log('Time entry started', response)
