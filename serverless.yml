@@ -1,5 +1,5 @@
 service:
-  name: toggl
+  name: ifttt-toggl
 
 # Add the serverless-webpack plugin
 plugins:
@@ -12,7 +12,7 @@ provider:
 
 functions:
   toggl:
-    handler: handler.toggl
+    handler: src/handler.toggl
     events:
       - http:
           method: post
