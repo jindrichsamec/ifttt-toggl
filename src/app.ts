@@ -4,6 +4,9 @@ import * as logger from 'koa-logger'
 import * as bodyParser from 'koa-bodyparser'
 import { startTimeEntry, getCurrentTimeEntry, stopTimeEntry } from './toggl'
 
+const IFTTT_LOCATION_ENTERED = 'entered'
+const IFTTT_LOCATION_EXITED = 'exited'
+
 const app = new Koa()
 const router = new Router()
 
@@ -39,6 +42,22 @@ router.post('/off', async (ctx: Koa.Context): Promise<void> => {
   ctx.status = 200
   console.log('Time entry stopped', currentTimeEntry)
 })
+
+router.post('/toggle', async (ctx: Koa.Context): Promise<void> => {
+  console.log('Starting time entry')
+  const { clientSecret, action, projectId, description } = ctx.request.body
+  ctx.status = 200
+  if (action === IFTTT_LOCATION_ENTERED && projectId && description) {
+    const timeEntry = await startTimeEntry(clientSecret, description, projectId)
+    ctx.body = timeEntry
+  } else if (action === IFTTT_LOCATION_EXITED) {
+    const currentTimeEntry = await getCurrentTimeEntry(clientSecret)
+    await stopTimeEntry(clientSecret, currentTimeEntry.data.id)
+    ctx.body = currentTimeEntry
+  } else {
+    ctx.status === 400
+  }
+});
 
 app.use(logger())
 app.use(bodyParser())
