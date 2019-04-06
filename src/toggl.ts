@@ -32,7 +32,6 @@ export const getCurrentTimeEntry = async (clientSecret: string): Promise<TimeEnt
 }
 
 export const stopTimeEntry = async (clientSecret: string, timeEntryId: number): Promise<Response> => {
-  console.log(`https://${clientSecret}:api_token@www.toggl.com/api/v8/time_entries/${timeEntryId}/stop`)
   const url = `https://${clientSecret}:api_token@www.toggl.com/api/v8/time_entries/${timeEntryId}/stop`
   return fetch(url, {
     method: 'PUT'
