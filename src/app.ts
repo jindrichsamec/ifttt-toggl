@@ -1,8 +1,11 @@
+import Debug from 'debug'
 import * as Koa from 'koa'
 import * as Router from 'koa-router'
 import * as logger from 'koa-logger'
 import * as bodyParser from 'koa-bodyparser'
 import { handleOn, handleOff, handleToggle } from './requestHandlers'
+
+const debug = Debug('ifttt-toggl:app')
 const app = new Koa()
 const router = new Router()
 
@@ -27,7 +30,7 @@ app.use(async (ctx: Koa.Context, next: Function) => {
      ctx.response.status = 400
      return
    }
-   console.log('Client secret', clientSecret)
+  debug('Client secret', clientSecret)
    await next()
 })
 app.use(router.routes())

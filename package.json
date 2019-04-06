@@ -4,12 +4,13 @@
   "description": "Serverless webpack example using Typescript",
   "main": "handler.js",
   "scripts": {
-    "start:dev": "ts-node ./src/index.ts",
-    "start:watch": "ts-node ./src/index.ts",
+    "start:dev": "DEBUG=ifttt-toggl* ts-node ./src/index.ts",
+    "start:watch": "DEBUG=ifttt-toggl* ts-node ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@types/node-fetch": "^2.1.7",
+    "debug": "^4.1.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-logger": "^3.2.0",
