@@ -12,7 +12,7 @@ provider:
 
 functions:
   toggl:
-    handler: src/lambda.toggl
+    handler: src/index.toggl
     events:
       - http:
           method: post
