@@ -7,7 +7,7 @@ interface TimeEntry {
 }
 
 export const startTimeEntry = async (clientSecret: string, description: string, projectId: number): Promise<TimeEntry> => {
-  const url = `https://${clientSecret}:api_token@www.toggl.com/api/v8/time_entries/start`
+  const url = `https://${clientSecret}:api_token@api.track.toggl.com/api/v8/time_entries/start`
   const response: Response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify({
@@ -24,7 +24,7 @@ export const startTimeEntry = async (clientSecret: string, description: string, 
 }
 
 export const getCurrentTimeEntry = async (clientSecret: string): Promise<TimeEntry> => {
-  const url = `https://${clientSecret}:api_token@www.toggl.com/api/v8/time_entries/current`
+  const url = `https://${clientSecret}:api_token@api.track.toggl.com/api/v8/time_entries/current`
   const response = await fetch(url, {
     method: 'GET'
   })
@@ -32,7 +32,7 @@ export const getCurrentTimeEntry = async (clientSecret: string): Promise<TimeEnt
 }
 
 export const stopTimeEntry = async (clientSecret: string, timeEntryId: number): Promise<Response> => {
-  const url = `https://${clientSecret}:api_token@www.toggl.com/api/v8/time_entries/${timeEntryId}/stop`
+  const url = `https://${clientSecret}:api_token@api.track.toggl.com/api/v8/time_entries/${timeEntryId}/stop`
   return fetch(url, {
     method: 'PUT'
   })
